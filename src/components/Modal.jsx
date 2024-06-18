@@ -51,7 +51,7 @@ export default function ModalComponent({ isOpen, onClose, movie }) {
     setRating(newRating);
     if (user) {
       dispatch(rateMovie(movie._id, newRating, user, movie)).then(()=>{
-        dispatch(fetchUserMovies());
+        dispatch(fetchUserMovies(user));
         dispatch(fetchMovies());
       }).then(()=>{
         onClose();
@@ -120,7 +120,7 @@ export default function ModalComponent({ isOpen, onClose, movie }) {
     e.preventDefault();
     dispatch(editMovie(movie._id, editData))
       .then(() => {
-        dispatch(fetchUserMovies());
+        dispatch(fetchUserMovies(user));
         dispatch(fetchMovies());
       })
       .then(() => {
@@ -135,7 +135,7 @@ export default function ModalComponent({ isOpen, onClose, movie }) {
 
   const handleDeleteSubmit = () => {
     dispatch(deleteMovie(movie._id)).then(()=>{
-      dispatch(fetchUserMovies());
+      dispatch(fetchUserMovies(user));
       toast.success("Deleted Successfully")
     }).then(()=>{
       onClose(); // Close the modal after submission

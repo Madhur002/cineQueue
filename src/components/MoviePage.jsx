@@ -13,11 +13,12 @@ const MoviePage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const dispatch = useDispatch();
+  const user = useSelector((state) => state?.user?.user?.user);
   const movies = useSelector((state) => state.movies.usermovies);
   console.log("movies asdasdasda",movies);
   useEffect(() => {
-    dispatch(fetchUserMovies());
-  }, [dispatch]);
+    dispatch(fetchUserMovies(user));
+  }, [dispatch, user]);
 
   const openModal = (movie) => {
     setSelectedMovie(movie);

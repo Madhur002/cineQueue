@@ -2,14 +2,15 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-const apiUrl = 'http://localhost:3000';
+const apiUrl = 'https://backend-cinequeue.onrender.com';
 
 export const fetchMovies = () => async dispatch => {
   const response = await axios.get(`${apiUrl}/movies`);
   dispatch({ type: 'FETCH_MOVIES', payload: response.data });
 };
-export const fetchUserMovies = () => async dispatch => {
-  const response = await axios.get(`${apiUrl}/usermovies`);
+export const fetchUserMovies = (user) => async dispatch => {
+  const userId = user._id;
+  const response = await axios.get(`${apiUrl}/usermovies`,{ userId });
   dispatch({ type: 'FETCH_USER_MOVIES', payload: response.data });
 };  
 
