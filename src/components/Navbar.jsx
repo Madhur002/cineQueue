@@ -8,9 +8,21 @@ import {
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
+  Tooltip,
 } from "@nextui-org/react";
-
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../actions/userActions";
+import { Link } from "react-router-dom";
+import { TbLogout2 } from "react-icons/tb";
+import { useNavigate } from "react-router-dom";
 const Navbar = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.user.user?.user);
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    navigate("/");
+  };
   const [currentTime, setCurrentTime] = useState(new Date());
   const [search, setSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -28,7 +40,7 @@ const Navbar = () => {
 
     // Clear interval on component unmount
     return () => clearInterval(interval);
-  }, []); // Empty dependency array means this effect runs only once
+  }, []);
 
   const formattedTime = currentTime.toLocaleTimeString("en-US", {
     hour: "numeric",
@@ -63,7 +75,7 @@ const Navbar = () => {
                   <DropdownTrigger>
                     <button className="flex justify-start gap-2 items-center">
                       {selectedValue}
-                      <FaAngleDown/>
+                      <FaAngleDown />
                     </button>
                   </DropdownTrigger>
                   <DropdownMenu
@@ -107,20 +119,34 @@ const Navbar = () => {
             </div>
             <div className="text-[#ffffff66] flex">
               <ul className="flex justify-end items-center gap-3">
-                <li
-                  className="cursor-pointer"
-                  onClick={() => {
-                    setSearch(!search);
-                  }}
-                >
-                  <IoSearch />
-                </li>
-                <li className="cursor-pointer">
-                  <FaHeartCirclePlus />
-                </li>
-                <li className="cursor-pointer">
-                  <IoPerson />
-                </li>
+                <Tooltip content="All Movies">
+                  <Link
+                    to="/"
+                    className="cursor-pointer"
+                    onClick={() => {
+                      setSearch(!search);
+                    }}
+                  >
+                    <IoSearch />
+                  </Link>
+                </Tooltip>
+                <Tooltip content="Your Watchlist">
+                  <Link to="/myMovies" className="cursor-pointer" onClick={() => {
+                      setSearch(false);
+                    }}>
+                    <FaHeartCirclePlus />
+                  </Link>
+                </Tooltip>
+                {user && (
+                  <>
+                      <li className="flex justify-start items-center gap-2 cursor-pointer">
+                        <IoPerson />{user?.userName}
+                      </li>
+                    <button onClick={handleLogout} className="cursor-pointer">
+                      <TbLogout2 />
+                    </button>
+                  </>
+                )}
                 <li className="select-none">{formattedTime}</li>
               </ul>
             </div>

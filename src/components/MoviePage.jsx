@@ -2,19 +2,21 @@ import { Card, Skeleton } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  fetchMovies
+    fetchUserMovies
 } from "../actions/movieActions";
 import ModalComponent from "./Modal";
+import { useNavigate } from "react-router-dom";
 
-const Home = () => {
+const MoviePage = () => {
   // const [movies, setMovies] = useState([]);
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const dispatch = useDispatch();
-  const movies = useSelector((state) => state.movies.movies);
+  const movies = useSelector((state) => state.movies.usermovies);
   console.log("movies asdasdasda",movies);
   useEffect(() => {
-    dispatch(fetchMovies());
+    dispatch(fetchUserMovies());
   }, [dispatch]);
 
   const openModal = (movie) => {
@@ -26,7 +28,18 @@ const Home = () => {
     setIsOpen(false);
     setSelectedMovie(null); // Clear selected movie when modal is closed
   };
-  // console.log("movies",movies);
+
+  useEffect(() => {
+    if (movies?.length === 0) {
+      const timer = setTimeout(() => {
+        navigate("/");
+      }, 5000); // Wait for 5 seconds
+
+      // Clean up the timeout if the component unmounts or if the dependency changes
+      return () => clearTimeout(timer);
+    }
+  }, [movies?.length, navigate]);
+  
   return (
     <div className="pb-28 px-8 pt-28 h-full w-full flex justify-center gap-10 items-center flex-wrap overflow-y-auto">
       { movies?.length <= 0 ? (
@@ -90,4 +103,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default MoviePage;
