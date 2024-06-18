@@ -2,6 +2,7 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
+// const apiUrl = 'http://localhost:3000';
 const apiUrl = 'https://backend-cinequeue.onrender.com';
 
 export const fetchMovies = () => async dispatch => {
@@ -10,9 +11,15 @@ export const fetchMovies = () => async dispatch => {
 };
 export const fetchUserMovies = (user) => async dispatch => {
   const userId = user._id;
-  const response = await axios.get(`${apiUrl}/usermovies`,{ userId });
+  console.log("userId for fetch user movies", userId);
+
+  const response = await axios.get(`${apiUrl}/usermovies`, {
+    params: { userId }, // Include userId in params object
+  });
+  console.log("response for fetch user movies", response);
   dispatch({ type: 'FETCH_USER_MOVIES', payload: response.data });
-};  
+};
+ 
 
 export const addMovie = (movie) => async dispatch => {
   const response = await axios.post(`${apiUrl}/movies`, movie);
