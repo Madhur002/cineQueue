@@ -3,7 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 // const apiUrl = 'http://localhost:3000';
-const apiUrl = 'https://backend-cinequeue.onrender.com';
+const apiUrl = 'https://backend-cinequeue-m5oxsas1y-madhur002s-projects.vercel.app';
 
 export const fetchMovies = () => async dispatch => {
   const response = await axios.get(`${apiUrl}/movies`);
